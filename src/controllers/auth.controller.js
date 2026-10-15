@@ -1,9 +1,13 @@
 'use strict';
 
-export const authController = {
-  register: (req, res) => {
-    const { email, password } = req.body;
+import { authService } from '../services/auth.service.js';
 
-    res.status(200).send(`${email} ${password}`);
+export const authController = {
+  register: async (req, res) => {
+    const { name, email, password } = req.body;
+
+    const newUser = await authService.register({ name, email, password });
+
+    res.send(newUser);
   },
 };
