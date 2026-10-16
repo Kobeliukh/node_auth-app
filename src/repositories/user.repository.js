@@ -10,4 +10,8 @@ export const userRepository = {
       },
     });
   },
+
+  findByEmail: (email) => {
+    return db.user.findUnique({ where: { email } });
+  },
 };
