@@ -8,6 +8,6 @@ export const authController = {
 
     const newUser = await authService.register({ name, email, password });
 
-    res.status(201).send(newUser);
+    res.status(201).send(authService.normalize(newUser));
   },
 };
