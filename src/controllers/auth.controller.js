@@ -6,12 +6,8 @@ export const authController = {
   register: async (req, res) => {
     const { name, email, password } = req.body;
 
-    try {
-      const newUser = await authService.register({ name, email, password });
+    const newUser = await authService.register({ name, email, password });
 
-      res.send(newUser);
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
+    res.status(201).send(newUser);
   },
 };

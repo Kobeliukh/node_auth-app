@@ -1,3 +1,4 @@
+import { ApiError } from '../exceptions/api.error.js';
 import { userRepository } from '../repositories/user.repository.js';
 
 export const authService = {
@@ -5,7 +6,10 @@ export const authService = {
     const existingUser = await userRepository.findByEmail(user.email);
 
     if (existingUser) {
-      throw new Error('User already exists');
+      throw ApiError.unprocessableEntity({
+        message: 'Validation error.',
+        errors: { email: 'This email is already taken.' },
+      });
     }
 
     return userRepository.createUser(user);
