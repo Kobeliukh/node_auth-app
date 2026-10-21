@@ -7,3 +7,8 @@ import { catchError } from '../utils/catchError.js';
 export const authRouter = Router();
 
 authRouter.post('/registration', catchError(authController.register));
+
+authRouter.get(
+  '/activation/:activationToken',
+  catchError(authController.activate),
+);

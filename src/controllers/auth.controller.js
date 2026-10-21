@@ -24,4 +24,12 @@ export const authController = {
 
     res.status(201).send(authService.normalize(newUser));
   },
+
+  activate: async (req, res) => {
+    const { activationToken } = req.params;
+
+    await authService.activate(activationToken);
+
+    res.sendStatus(204);
+  },
 };

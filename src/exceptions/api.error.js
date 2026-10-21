@@ -13,4 +13,20 @@ export class ApiError extends Error {
       status: 422,
     });
   }
+
+  static serviceUnavailable({ errors }) {
+    return new ApiError({
+      message: 'Service Unavailable.',
+      errors,
+      status: 503,
+    });
+  }
+
+  static badRequest({ message, errors }) {
+    return new ApiError({
+      message,
+      errors,
+      status: 400,
+    });
+  }
 }

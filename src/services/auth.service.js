@@ -1,6 +1,7 @@
 import { ApiError } from '../exceptions/api.error.js';
 import { userRepository } from '../repositories/user.repository.js';
 import bcrypt from 'bcrypt';
+import { sendActivationEmail } from '../utils/sendActivationEmail.js';
 
 export const authService = {
   register: async (user) => {
@@ -16,9 +17,38 @@ export const authService = {
     }
 
     const hash = await bcrypt.hash(password, 10);
+    const activationToken = crypto.randomUUID();
 
-    return userRepository.createUser({ ...user, password: hash });
+    try {
+      const newUser = await userRepository.createUser({
+        ...user,
+        password: hash,
+        activationToken,
+      });
+
+      await sendActivationEmail(email, activationToken);
+
+      return newUser;
+    } catch {
+      await userRepository.deleteUser(email);
+
+      throw ApiError.serviceUnavailable({});
+    }
   },
+
+  activate: async (activationToken) => {
+    const user = await userRepository.findByActivationToken(activationToken);
+
+    if (!user) {
+      throw ApiError.badRequest({ message: 'Invalid token' });
+    }
+
+    return userRepository.udpateUser({
+      where: { activationToken },
+      data: { activationToken: null },
+    });
+  },
+
   validateEmail: (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -30,6 +60,7 @@ export const authService = {
       return 'The email address is invalid.';
     }
   },
+
   validatePassword: (password) => {
     if (!password) {
       return 'Password is required.';
@@ -43,6 +74,7 @@ export const authService = {
       return 'The password is too long.';
     }
   },
+
   validateName: (name) => {
     if (!name) {
       return 'Name is required.';
@@ -52,6 +84,7 @@ export const authService = {
       return 'The name is too short.';
     }
   },
+
   normalize: ({ id, email, name }) => {
     return { id, email, name };
   },
