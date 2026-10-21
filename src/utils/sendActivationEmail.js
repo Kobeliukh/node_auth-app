@@ -1,7 +1,7 @@
 import { mailer } from './mailer.js';
 
 export const sendActivationEmail = (email, activationToken) => {
-  const link = `${process.env.CLIENT_URL}/auth/activation/${activationToken}`;
+  const link = `${process.env.SERVER_URL}/auth/activation/${activationToken}`;
   const html = `
     <h1>Account activation</h1>
     <a href="${link}">${link}</a>
