@@ -29,4 +29,20 @@ export class ApiError extends Error {
       status: 400,
     });
   }
+
+  static unauthorized({ message, errors }) {
+    return new ApiError({
+      message,
+      errors,
+      status: 401,
+    });
+  }
+
+  static forbidden({ message, errors }) {
+    return new ApiError({
+      message,
+      errors,
+      status: 404,
+    });
+  }
 }

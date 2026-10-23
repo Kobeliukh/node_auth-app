@@ -32,4 +32,21 @@ export const authController = {
 
     res.sendStatus(204);
   },
+
+  login: async (req, res) => {
+    const { email, password } = req.body;
+
+    const { user, accessToken, refreshToken } = await authService.login({
+      email,
+      password,
+    });
+
+    res
+      .cookie('refreshToken', refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      })
+      .status(200)
+      .send({ user, accessToken });
+  },
 };

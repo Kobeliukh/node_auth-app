@@ -12,3 +12,5 @@ authRouter.get(
   '/activation/:activationToken',
   catchError(authController.activate),
 );
+
+authRouter.post('/login', catchError(authController.login));

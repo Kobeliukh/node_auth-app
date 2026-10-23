@@ -2,6 +2,7 @@ import { ApiError } from '../exceptions/api.error.js';
 import { userRepository } from '../repositories/user.repository.js';
 import bcrypt from 'bcrypt';
 import { sendActivationEmail } from '../utils/sendActivationEmail.js';
+import { tokenService } from './token.service.js';
 
 export const authService = {
   register: async (user) => {
@@ -47,6 +48,28 @@ export const authService = {
       where: { activationToken },
       data: { activationToken: null },
     });
+  },
+
+  login: async ({ email, password }) => {
+    const user = await userRepository.findByEmail(email);
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      throw ApiError.unauthorized({
+        message: 'Incorrect email address or password.',
+      });
+    }
+
+    if (user.activationToken) {
+      throw ApiError.forbidden({
+        message: `Please activate your account. A link has been sent to your email address.`,
+      });
+    }
+
+    const { accessToken, refreshToken } = tokenService.generateTokens(user.id);
+
+    await tokenService.saveRefreshToken(user.id, refreshToken);
+
+    return { user: authService.normalize(user), accessToken, refreshToken };
   },
 
   validateEmail: (email) => {
