@@ -2,6 +2,7 @@
 
 import { ApiError } from '../exceptions/api.error.js';
 import { authService } from '../services/auth.service.js';
+import { tokenService } from '../services/token.service.js';
 
 export const authController = {
   register: async (req, res) => {
@@ -28,9 +29,13 @@ export const authController = {
   activate: async (req, res) => {
     const { activationToken } = req.params;
 
-    await authService.activate(activationToken);
+    const { user, accessToken, refreshToken } =
+      await authService.activate(activationToken);
 
-    res.sendStatus(204);
+    tokenService
+      .setRefreshToken(res, refreshToken)
+      .status(200)
+      .send({ user, accessToken });
   },
 
   login: async (req, res) => {
@@ -41,11 +46,8 @@ export const authController = {
       password,
     });
 
-    res
-      .cookie('refreshToken', refreshToken, {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-      })
+    tokenService
+      .setRefreshToken(res, refreshToken)
       .status(200)
       .send({ user, accessToken });
   },

@@ -44,10 +44,16 @@ export const authService = {
       throw ApiError.badRequest({ message: 'Invalid token' });
     }
 
-    return userRepository.udpateUser({
+    const { accessToken, refreshToken } = tokenService.generateTokens(user.id);
+
+    await userRepository.udpateUser({
       where: { activationToken },
       data: { activationToken: null },
     });
+
+    await tokenService.saveRefreshToken(user.id, refreshToken);
+
+    return { user: authService.normalize(user), accessToken, refreshToken };
   },
 
   login: async ({ email, password }) => {
