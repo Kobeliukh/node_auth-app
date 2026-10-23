@@ -24,4 +24,19 @@ export const tokenService = {
       httpOnly: true,
     });
   },
+
+  verifyRefreshToken: (refreshToken) => {
+    try {
+      return jwt.verify(refreshToken, process.env.JWT_REFRESH);
+    } catch {
+      return null;
+    }
+  },
+
+  updateRefreshToken: (oldRefreshToken, newRefreshToken) => {
+    return refreshTokenRepository.updateRefreshToken(
+      oldRefreshToken,
+      newRefreshToken,
+    );
+  },
 };

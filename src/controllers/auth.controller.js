@@ -51,4 +51,29 @@ export const authController = {
       .status(200)
       .send({ user, accessToken });
   },
+
+  refresh: async (req, res) => {
+    const userRefreshToken = req.cookies.refreshToken;
+
+    if (!userRefreshToken) {
+      throw ApiError.unauthorized({ message: 'Refresh token is missing' });
+    }
+
+    const refreshTokenData = tokenService.verifyRefreshToken(userRefreshToken);
+
+    if (!refreshTokenData) {
+      throw ApiError.unauthorized({ message: 'Refresh token is invalid.' });
+    }
+
+    const { accessToken, refreshToken } = tokenService.generateTokens(
+      refreshTokenData.userId,
+    );
+
+    await tokenService.updateRefreshToken(userRefreshToken, refreshToken);
+
+    tokenService
+      .setRefreshToken(res, refreshToken)
+      .status(200)
+      .send({ accessToken });
+  },
 };
