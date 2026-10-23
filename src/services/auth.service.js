@@ -46,7 +46,7 @@ export const authService = {
 
     const { accessToken, refreshToken } = tokenService.generateTokens(user.id);
 
-    await userRepository.udpateUser({
+    await userRepository.updateUser({
       where: { activationToken },
       data: { activationToken: null },
     });

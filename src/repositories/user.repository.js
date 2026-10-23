@@ -24,7 +24,7 @@ export const userRepository = {
     return db.user.findFirst({ where: { activationToken } });
   },
 
-  udpateUser: ({ where, data }) => {
+  updateUser: ({ where, data }) => {
     return db.user.update({ where, data });
   },
 };
