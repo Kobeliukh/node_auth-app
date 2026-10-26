@@ -42,7 +42,7 @@ export class ApiError extends Error {
     return new ApiError({
       message,
       errors,
-      status: 404,
+      status: 403,
     });
   }
 
