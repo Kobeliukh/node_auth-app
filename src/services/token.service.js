@@ -43,4 +43,12 @@ export const tokenService = {
   deleteRefreshToken: (refreshToken) => {
     return refreshTokenRepository.deleteRefreshToken(refreshToken);
   },
+
+  verifyAccessToken: (accessToken) => {
+    try {
+      return jwt.verify(accessToken, process.env.JWT_ACCESS);
+    } catch {
+      return null;
+    }
+  },
 };
