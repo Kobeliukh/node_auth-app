@@ -2,7 +2,7 @@
 
 import express from 'express';
 import { authRouter } from './routes/auth.route.js';
-import { errorMiddleware } from './middlewares/errorMiddleware.js';
+import { errorMiddleware } from './middlewares/error.middleware.js';
 import cookieParser from 'cookie-parser';
 
 export const createServer = () => {
