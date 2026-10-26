@@ -16,3 +16,9 @@ usersRouter.patch(
   authMiddleware,
   catchError(usersController.changeUserName),
 );
+
+usersRouter.patch(
+  '/me/password',
+  authMiddleware,
+  catchError(usersController.changeUserPassword),
+);
