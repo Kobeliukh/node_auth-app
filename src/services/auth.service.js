@@ -3,6 +3,7 @@ import { userRepository } from '../repositories/user.repository.js';
 import bcrypt from 'bcrypt';
 import { sendActivationEmail } from '../utils/sendActivationEmail.js';
 import { tokenService } from './token.service.js';
+import { userService } from './user.service.js';
 
 export const authService = {
   register: async (user) => {
@@ -53,7 +54,7 @@ export const authService = {
 
     await tokenService.saveRefreshToken(user.id, refreshToken);
 
-    return { user: authService.normalize(user), accessToken, refreshToken };
+    return { user: userService.normalize(user), accessToken, refreshToken };
   },
 
   login: async ({ email, password }) => {
@@ -75,7 +76,7 @@ export const authService = {
 
     await tokenService.saveRefreshToken(user.id, refreshToken);
 
-    return { user: authService.normalize(user), accessToken, refreshToken };
+    return { user: userService.normalize(user), accessToken, refreshToken };
   },
 
   validateEmail: (email) => {
@@ -112,9 +113,5 @@ export const authService = {
     if (name.length < 3) {
       return 'The name is too short.';
     }
-  },
-
-  normalize: ({ id, email, name }) => {
-    return { id, email, name };
   },
 };

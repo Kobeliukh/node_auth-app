@@ -27,4 +27,8 @@ export const userRepository = {
   updateUser: ({ where, data }) => {
     return db.user.update({ where, data });
   },
+
+  findById: (id) => {
+    return db.user.findUnique({ where: { id } });
+  },
 };

@@ -45,4 +45,12 @@ export class ApiError extends Error {
       status: 404,
     });
   }
+
+  static notFound({ message, errors }) {
+    return new ApiError({
+      message,
+      errors,
+      status: 404,
+    });
+  }
 }

@@ -2,6 +2,7 @@
 
 import express from 'express';
 import { authRouter } from './routes/auth.route.js';
+import { usersRouter } from './routes/user.route.js';
 import { errorMiddleware } from './middlewares/error.middleware.js';
 import cookieParser from 'cookie-parser';
 
@@ -12,6 +13,7 @@ export const createServer = () => {
   app.use(express.json());
 
   app.use('/auth', authRouter);
+  app.use('/users', usersRouter);
 
   app.use(errorMiddleware);
 

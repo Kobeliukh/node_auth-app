@@ -3,6 +3,7 @@
 import { ApiError } from '../exceptions/api.error.js';
 import { authService } from '../services/auth.service.js';
 import { tokenService } from '../services/token.service.js';
+import { userService } from '../services/user.service.js';
 
 export const authController = {
   register: async (req, res) => {
@@ -23,7 +24,7 @@ export const authController = {
 
     const newUser = await authService.register({ name, email, password });
 
-    res.status(201).send(authService.normalize(newUser));
+    res.status(201).send(userService.normalize(newUser));
   },
 
   activate: async (req, res) => {
