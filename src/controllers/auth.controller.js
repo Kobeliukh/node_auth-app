@@ -76,4 +76,18 @@ export const authController = {
       .status(200)
       .send({ accessToken });
   },
+
+  logout: async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      res.sendStatus(204);
+
+      return;
+    }
+
+    await tokenService.deleteRefreshToken(refreshToken);
+
+    res.clearCookie('refreshToken').sendStatus(204);
+  },
 };

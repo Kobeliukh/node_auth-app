@@ -16,3 +16,5 @@ authRouter.get(
 authRouter.post('/login', catchError(authController.login));
 
 authRouter.get('/refresh', catchError(authController.refresh));
+
+authRouter.get('/logout', catchError(authController.logout));

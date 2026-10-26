@@ -39,4 +39,8 @@ export const tokenService = {
       newRefreshToken,
     );
   },
+
+  deleteRefreshToken: (refreshToken) => {
+    return refreshTokenRepository.deleteRefreshToken(refreshToken);
+  },
 };

@@ -11,4 +11,8 @@ export const refreshTokenRepository = {
       data: { refreshToken: newRefreshToken },
     });
   },
+
+  deleteRefreshToken: (refreshToken) => {
+    return db.refreshToken.delete({ where: { refreshToken } });
+  },
 };
