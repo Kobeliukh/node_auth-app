@@ -10,3 +10,9 @@ usersRouter.get(
   authMiddleware,
   catchError(usersController.getUserProfile),
 );
+
+usersRouter.patch(
+  '/me/name',
+  authMiddleware,
+  catchError(usersController.changeUserName),
+);

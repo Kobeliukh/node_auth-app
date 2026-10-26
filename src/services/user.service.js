@@ -5,6 +5,10 @@ export const userService = {
     return userRepository.findById(userId);
   },
 
+  updateUserName: (id, name) => {
+    return userRepository.updateUser({ where: { id }, data: { name } });
+  },
+
   normalize: ({ id, email, name }) => {
     return { id, email, name };
   },
