@@ -99,4 +99,28 @@ export const authController = {
 
     res.sendStatus(204);
   },
+
+  requestPasswordReset: async (req, res) => {
+    const { email } = req.body;
+
+    await authService.requestPasswordReset(email);
+
+    res.sendStatus(204);
+  },
+
+  resetPassword: async (req, res) => {
+    const { confirmationToken } = req.params;
+    const { newPassword, newPasswordConfirmation } = req.body;
+
+    if (newPassword !== newPasswordConfirmation) {
+      throw ApiError.unprocessableEntity({
+        message: 'Validation error.',
+        errors: { password: 'passwords must match.' },
+      });
+    }
+
+    await authService.resetPassword(newPassword, confirmationToken);
+
+    res.sendStatus(204);
+  },
 };

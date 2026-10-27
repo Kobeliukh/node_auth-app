@@ -23,3 +23,13 @@ authRouter.get(
   '/new-email-confirmation/:activationToken',
   catchError(authController.confirmNewEmail),
 );
+
+authRouter.post(
+  '/password-reset',
+  catchError(authController.requestPasswordReset),
+);
+
+authRouter.patch(
+  '/password-reset/:confirmationToken',
+  catchError(authController.resetPassword),
+);

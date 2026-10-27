@@ -36,4 +36,14 @@ export const emailService = {
       html,
     );
   },
+
+  sendPasswordResetConfirmation: (email, confirmationToken) => {
+    const link = `${process.env.CLIENT_URL}/auth/password-reset/${confirmationToken}`;
+    const html = `
+      <h1>Email confirmation</h1>
+      <a href="${link}">${link}</a>
+    `;
+
+    return mailer.send(email, 'node_auth-app email confirmation', html);
+  },
 };

@@ -134,4 +134,28 @@ export const authService = {
 
     await emailService.notifyOldEmail(user.email, user.pendingEmail);
   },
+
+  requestPasswordReset: async (email) => {
+    const confirmationToken = crypto.randomUUID();
+
+    try {
+      await userRepository.updateUser({
+        where: { email },
+        data: { passwordResetConfirmationToken: confirmationToken },
+      });
+    } catch {
+      return;
+    }
+
+    return emailService.sendPasswordResetConfirmation(email, confirmationToken);
+  },
+
+  resetPassword: async (newPassword, confirmationToken) => {
+    const newPasswordHash = await bcrypt.hash(newPassword, 10);
+
+    return userRepository.updateUser({
+      where: { passwordResetConfirmationToken: confirmationToken },
+      data: { passwordResetConfirmationToken: null, password: newPasswordHash },
+    });
+  },
 };
