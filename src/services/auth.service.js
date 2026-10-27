@@ -1,12 +1,9 @@
 import { ApiError } from '../exceptions/api.error.js';
 import { userRepository } from '../repositories/user.repository.js';
 import bcrypt from 'bcrypt';
-import {
-  notifyOldEmail,
-  sendActivationEmail,
-} from '../utils/sendActivationEmail.js';
 import { tokenService } from './token.service.js';
 import { userService } from './user.service.js';
+import { emailService } from './email.service.js';
 
 export const authService = {
   register: async (user) => {
@@ -31,7 +28,7 @@ export const authService = {
         activationToken,
       });
 
-      await sendActivationEmail(email, activationToken);
+      await emailService.sendActivationEmail(email, activationToken);
 
       return newUser;
     } catch {
@@ -135,6 +132,6 @@ export const authService = {
       },
     });
 
-    await notifyOldEmail(user.email, user.pendingEmail);
+    await emailService.notifyOldEmail(user.email, user.pendingEmail);
   },
 };

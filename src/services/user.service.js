@@ -1,5 +1,5 @@
 import { userRepository } from '../repositories/user.repository.js';
-import { sendActivationEmailPending } from '../utils/sendActivationEmail.js';
+import { emailService } from './email.service.js';
 
 export const userService = {
   getUserData: (userId) => {
@@ -17,7 +17,7 @@ export const userService = {
   setPendingEmail: async (id, pendingEmail) => {
     const pendingEmailConfirmationToken = crypto.randomUUID();
 
-    await sendActivationEmailPending(
+    await emailService.sendActivationEmailPending(
       pendingEmail,
       pendingEmailConfirmationToken,
     );
