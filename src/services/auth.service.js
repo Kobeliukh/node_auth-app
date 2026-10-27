@@ -1,7 +1,10 @@
 import { ApiError } from '../exceptions/api.error.js';
 import { userRepository } from '../repositories/user.repository.js';
 import bcrypt from 'bcrypt';
-import { sendActivationEmail } from '../utils/sendActivationEmail.js';
+import {
+  notifyOldEmail,
+  sendActivationEmail,
+} from '../utils/sendActivationEmail.js';
 import { tokenService } from './token.service.js';
 import { userService } from './user.service.js';
 
@@ -113,5 +116,25 @@ export const authService = {
     if (name.length < 3) {
       return 'The name is too short.';
     }
+  },
+
+  confirmNewEmail: async (activationToken) => {
+    const user =
+      await userRepository.findByPendingConfirmationToken(activationToken);
+
+    if (!user) {
+      throw ApiError.badRequest({ message: 'Invalid token' });
+    }
+
+    await userRepository.updateUser({
+      where: { email: user.email },
+      data: {
+        email: user.pendingEmail,
+        pendingEmail: null,
+        pendingEmailConfirmationToken: null,
+      },
+    });
+
+    await notifyOldEmail(user.email, user.pendingEmail);
   },
 };

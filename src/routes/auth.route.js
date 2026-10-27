@@ -18,3 +18,8 @@ authRouter.post('/login', catchError(authController.login));
 authRouter.get('/refresh', catchError(authController.refresh));
 
 authRouter.get('/logout', catchError(authController.logout));
+
+authRouter.get(
+  '/new-email-confirmation/:activationToken',
+  catchError(authController.confirmNewEmail),
+);

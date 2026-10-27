@@ -13,12 +13,14 @@ datasource db {
 }
 
 model User {
-  id              String         @id @default(uuid())
-  name            String
-  email           String         @unique
-  password        String
-  activationToken String?        @unique @map("activation_token")
-  refreshTokens   RefreshToken[]
+  id                            String         @id @default(uuid())
+  name                          String
+  email                         String         @unique
+  password                      String
+  activationToken               String?        @unique @map("activation_token")
+  pendingEmail                  String?        @unique @map("pending_email")
+  pendingEmailConfirmationToken String?        @unique @map("pending_email_confirmation_token")
+  refreshTokens                 RefreshToken[]
 
   @@map("users")
 }

@@ -76,4 +76,33 @@ export const usersController = {
 
     res.status(200).send(userService.normalize(updatedUser));
   },
+
+  changeUserEmail: async (req, res) => {
+    const { userId } = req.user;
+    const { password, pendingEmail } = req.body;
+
+    const errors = {
+      email: authService.validateEmail(pendingEmail),
+    };
+
+    if (Object.values(errors).some((error) => error)) {
+      throw ApiError.unprocessableEntity({
+        message: 'Validation error.',
+        errors,
+      });
+    }
+
+    const user = await userService.getUserData(userId);
+
+    if (!(await bcrypt.compare(password, user.password))) {
+      throw ApiError.unauthorized({
+        message: 'Validation error.',
+        errors: { password: 'Wrong password.' },
+      });
+    }
+
+    await userService.setPendingEmail(userId, pendingEmail);
+
+    res.sendStatus(204);
+  },
 };

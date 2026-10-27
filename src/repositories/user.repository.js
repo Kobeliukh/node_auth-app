@@ -31,4 +31,8 @@ export const userRepository = {
   findById: (id) => {
     return db.user.findUnique({ where: { id } });
   },
+
+  findByPendingConfirmationToken: (pendingEmailConfirmationToken) => {
+    return db.user.findFirst({ where: { pendingEmailConfirmationToken } });
+  },
 };

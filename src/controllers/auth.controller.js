@@ -91,4 +91,12 @@ export const authController = {
 
     res.clearCookie('refreshToken').sendStatus(204);
   },
+
+  confirmNewEmail: async (req, res) => {
+    const { activationToken } = req.params;
+
+    await authService.confirmNewEmail(activationToken);
+
+    res.sendStatus(204);
+  },
 };
