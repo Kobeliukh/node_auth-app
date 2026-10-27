@@ -1,6 +1,6 @@
-import { ApiError } from '../exceptions/api.error';
-import { authService } from '../services/auth.service';
-import { userService } from '../services/user.service';
+import { ApiError } from '../exceptions/api.error.js';
+import { authService } from '../services/auth.service.js';
+import { userService } from '../services/user.service.js';
 import bcrypt from 'bcrypt';
 
 export const usersController = {
